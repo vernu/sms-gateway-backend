@@ -9,6 +9,4 @@ interface ISMSData {
   smsBody: string
   receivers: string[]
 }
-interface SendSMSInputDTO {
-  smsData: ISMSData
-}
+interface SendSMSInputDTO extends ISMSData {}
