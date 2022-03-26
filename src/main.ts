@@ -3,6 +3,7 @@ import { VersioningType } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import * as firebase from 'firebase-admin'
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
@@ -13,6 +14,14 @@ async function bootstrap() {
     defaultVersion: '1',
     type: VersioningType.URI,
   })
+
+  const config = new DocumentBuilder()
+    .setTitle('VERNU SMS Gateway api docs')
+    .setDescription('api docs')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('', app, document);
 
   const firebaseConfig = {
     type: 'service_account',
