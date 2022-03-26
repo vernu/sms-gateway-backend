@@ -6,7 +6,7 @@ interface UpdateFCMTokenInputDTO {
   fcmToken: string
 }
 interface ISMSData {
-  message: string
+  smsBody: string
   receivers: string[]
 }
 interface SendSMSInputDTO {
