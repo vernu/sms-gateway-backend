@@ -9,13 +9,16 @@ export class GatewayService {
     @InjectModel(Device.name) private deviceModel: Model<DeviceDocument>,
   ) {}
 
-  async registerDevice(input: any): Promise<any> {
+  async registerDevice(input: RegisterDeviceInputDTO): Promise<any> {
     const { fcmToken } = input
     const newDevice = await this.deviceModel.create({ fcmToken })
     return newDevice
   }
 
-  async updateFCMToken(deviceId: string, input: any): Promise<any> {
+  async updateFCMToken(
+    deviceId: string,
+    input: UpdateFCMTokenInputDTO,
+  ): Promise<any> {
     const { fcmToken } = input
     const device = await this.deviceModel.findById(deviceId)
 
@@ -32,7 +35,7 @@ export class GatewayService {
     }
   }
 
-  async sendSMS(deviceId: string, smsData): Promise<any> {
+  async sendSMS(deviceId: string, smsData: SendSMSInputDTO): Promise<any> {
     const device = await this.deviceModel.findById(deviceId)
 
     if (!device) {
