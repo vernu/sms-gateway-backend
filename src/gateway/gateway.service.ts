@@ -15,11 +15,10 @@ export class GatewayService {
     return newDevice
   }
 
-  async updateFCMToken(
+  async updateDevice(
     deviceId: string,
-    input: UpdateFCMTokenInputDTO,
+    input: UpdateDeviceInputDTO,
   ): Promise<any> {
-    const { fcmToken } = input
     const device = await this.deviceModel.findById(deviceId)
 
     if (!device) {
@@ -29,10 +28,13 @@ export class GatewayService {
         },
         HttpStatus.NOT_FOUND,
       )
-    } else {
-      device.fcmToken = fcmToken
-      return await device.save()
     }
+
+    return await this.deviceModel.findByIdAndUpdate(
+      deviceId,
+      { $set: input },
+      { new: true },
+    )
   }
 
   async sendSMS(deviceId: string, smsData: SendSMSInputDTO): Promise<any> {

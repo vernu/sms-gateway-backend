@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common'
+import { Body, Controller, Param, Patch, Post } from '@nestjs/common'
 import { ApiTags } from '@nestjs/swagger'
 import { GatewayService } from './gateway.service'
 
@@ -12,12 +12,12 @@ export class GatewayController {
     const data = await this.gatewayService.registerDevice(input)
     return { data }
   }
-  @Post('/devices/:id/updateFCMToken')
-  async updateFCMToken(
+  @Patch('/devices/:id')
+  async updateDevice(
     @Param('id') deviceId: string,
-    @Body() input: UpdateFCMTokenInputDTO,
+    @Body() input: UpdateDeviceInputDTO,
   ) {
-    const data = await this.gatewayService.updateFCMToken(deviceId, input)
+    const data = await this.gatewayService.updateDevice(deviceId, input)
     return { data }
   }
 
