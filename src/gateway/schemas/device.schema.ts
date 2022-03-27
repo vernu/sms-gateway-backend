@@ -7,6 +7,9 @@ export type DeviceDocument = Device & Document
 export class Device {
   _id?: Types.ObjectId
 
+  @Prop({ type: Boolean, default: false })
+  enabled: boolean
+
   @Prop({ type: String })
   fcmToken: string
 

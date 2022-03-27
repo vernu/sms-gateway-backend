@@ -3,7 +3,8 @@ interface RegisterDeviceInputDTO {
 }
 
 interface UpdateDeviceInputDTO {
-  fcmToken: string
+  enabled?: boolean
+  fcmToken?: string
   brand?: string
   manufacturer?: string
   model?: string
