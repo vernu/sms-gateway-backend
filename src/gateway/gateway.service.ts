@@ -47,32 +47,42 @@ export class GatewayService {
         },
         HttpStatus.NOT_FOUND,
       )
-    } else {
-      const payload: any = {
-        // notification: {
-        //   title: 'SMS',
-        //   body: 'message',
-        // },
-        data: {
-          smsData: JSON.stringify(smsData),
-        },
-      }
-      try {
-        const response = await firebaseAdmin
-          .messaging()
-          .sendToDevice(device.fcmToken, payload, { priority: 'high' })
+    }
 
-        console.log('Successfully sent message:', response)
-        return response
-      } catch (e) {
-        console.log('Error sending message:', e)
-        throw new HttpException(
-          {
-            error: 'Failed to send SMS',
-          },
-          HttpStatus.BAD_REQUEST,
-        )
-      }
+    if (!device.enabled) {
+      throw new HttpException(
+        {
+          success: false,
+          error: 'Device is disabled',
+        },
+        HttpStatus.BAD_REQUEST,
+      )
+    }
+
+    const payload: any = {
+      // notification: {
+      //   title: 'SMS',
+      //   body: 'message',
+      // },
+      data: {
+        smsData: JSON.stringify(smsData),
+      },
+    }
+    try {
+      const response = await firebaseAdmin
+        .messaging()
+        .sendToDevice(device.fcmToken, payload, { priority: 'high' })
+
+      console.log('Successfully sent message:', response)
+      return response
+    } catch (e) {
+      console.log('Error sending message:', e)
+      throw new HttpException(
+        {
+          error: 'Failed to send SMS',
+        },
+        HttpStatus.BAD_REQUEST,
+      )
     }
   }
 }
