@@ -1,5 +1,10 @@
 import { Body, Controller, Param, Patch, Post } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import {
+  RegisterDeviceInputDTO,
+  SendSMSInputDTO,
+  UpdateDeviceInputDTO,
+} from './gateway.dto'
 import { GatewayService } from './gateway.service'
 
 @ApiTags('gateway')
@@ -7,11 +12,14 @@ import { GatewayService } from './gateway.service'
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
+  @ApiOperation({ summary: 'Register device' })
   @Post('/devices')
   async registerDevice(@Body() input: RegisterDeviceInputDTO) {
     const data = await this.gatewayService.registerDevice(input)
     return { data }
   }
+
+  @ApiOperation({ summary: 'Update device' })
   @Patch('/devices/:id')
   async updateDevice(
     @Param('id') deviceId: string,
@@ -21,6 +29,7 @@ export class GatewayController {
     return { data }
   }
 
+  @ApiOperation({ summary: 'Send SMS to a device' })
   @Post('/devices/:id/sendSMS')
   async sendSMS(
     @Param('id') deviceId: string,
