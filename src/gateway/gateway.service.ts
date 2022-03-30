@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Device, DeviceDocument } from './schemas/device.schema'
 import { Model } from 'mongoose'
 import * as firebaseAdmin from 'firebase-admin'
+import { RegisterDeviceInputDTO, SendSMSInputDTO, UpdateDeviceInputDTO } from './gateway.dto'
 @Injectable()
 export class GatewayService {
   constructor(
