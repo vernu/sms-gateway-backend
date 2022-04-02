@@ -3,7 +3,11 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Device, DeviceDocument } from './schemas/device.schema'
 import { Model } from 'mongoose'
 import * as firebaseAdmin from 'firebase-admin'
-import { RegisterDeviceInputDTO, SendSMSInputDTO, UpdateDeviceInputDTO } from './gateway.dto'
+import {
+  RegisterDeviceInputDTO,
+  SendSMSInputDTO,
+  UpdateDeviceInputDTO,
+} from './gateway.dto'
 @Injectable()
 export class GatewayService {
   constructor(
@@ -73,11 +77,8 @@ export class GatewayService {
       const response = await firebaseAdmin
         .messaging()
         .sendToDevice(device.fcmToken, payload, { priority: 'high' })
-
-      console.log('Successfully sent message:', response)
       return response
     } catch (e) {
-      console.log('Error sending message:', e)
       throw new HttpException(
         {
           error: 'Failed to send SMS',
