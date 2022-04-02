@@ -25,15 +25,15 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Generate Api Key' })
-  @Get('/generate-api-key')
+  @Post('/api-keys')
   async generateApiKey(@Request() req) {
     const { apiKey, message } = await this.authService.generateApiKey(req.user)
     return { data: apiKey, message }
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOperation({ summary: 'Get Api Key' })
-  @Get('/my-api-keys')
+  @ApiOperation({ summary: 'Get Api Key List (masked***)' })
+  @Get('/api-keys')
   async getApiKey(@Request() req) {
     const data = await this.authService.getUserApiKeys(req.user)
     return { data }
