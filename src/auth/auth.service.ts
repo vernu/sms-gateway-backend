@@ -2,12 +2,17 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { UsersService } from 'src/users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import * as bcrypt from 'bcryptjs'
-
+import { v4 as uuidv4 } from 'uuid'
+import { InjectModel } from '@nestjs/mongoose'
+import { ApiKey, ApiKeyDocument } from './schemas/api-key.schema'
+import { Model } from 'mongoose'
+import { User } from 'src/users/schemas/user.schema'
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    @InjectModel(ApiKey.name) private apiKeyModel: Model<ApiKeyDocument>,
   ) {}
 
   async validateUser(_id: string): Promise<any> {
@@ -42,7 +47,11 @@ export class AuthService {
   }
 
   async register(userData: any) {
-    const user = await this.usersService.create(userData)
+    const hashedPassword = await bcrypt.hash(userData.password, 10)
+    const user = await this.usersService.create({
+      ...userData,
+      password: hashedPassword,
+    })
 
     const payload = { email: user.email, sub: user._id }
 
@@ -50,5 +59,20 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
       user,
     }
+  }
+
+  async generateApiKey(currentUser: User) {
+    const apiKey = uuidv4()
+    const hashedApiKey = await bcrypt.hash(apiKey, 10)
+
+    const newApiKey = new this.apiKeyModel({
+      apiKey: apiKey.substr(0, 7) + '********',
+      hashedApiKey,
+      user: currentUser._id,
+    })
+
+    await newApiKey.save()
+
+    return { apiKey, message: 'Save this key, it wont be shown again ;)' }
   }
 }
