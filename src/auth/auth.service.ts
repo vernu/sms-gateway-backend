@@ -75,4 +75,8 @@ export class AuthService {
 
     return { apiKey, message: 'Save this key, it wont be shown again ;)' }
   }
+
+  async getUserApiKeys(currentUser: User) {
+    return  this.apiKeyModel.find({ user: currentUser._id })
+  }
 }
