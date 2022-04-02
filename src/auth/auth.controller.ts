@@ -1,7 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common'
+import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { LoginInputDTO, RegisterInputDTO } from './auth.dto'
 import { AuthService } from './auth.service'
+import { JwtAuthGuard } from './jwt-auth.guard'
 
 @ApiTags('auth')
 @Controller('auth')
@@ -19,6 +20,22 @@ export class AuthController {
   @Post('/register')
   async register(@Body() input: RegisterInputDTO) {
     const data = await this.authService.register(input)
+    return { data }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Generate Api Key' })
+  @Post('/api-keys')
+  async generateApiKey(@Request() req) {
+    const { apiKey, message } = await this.authService.generateApiKey(req.user)
+    return { data: apiKey, message }
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: 'Get Api Key List (masked***)' })
+  @Get('/api-keys')
+  async getApiKey(@Request() req) {
+    const data = await this.authService.getUserApiKeys(req.user)
     return { data }
   }
 }
