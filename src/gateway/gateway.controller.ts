@@ -7,7 +7,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common'
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/auth/auth.guard'
 import {
   RegisterDeviceInputDTO,
@@ -17,6 +17,7 @@ import {
 import { GatewayService } from './gateway.service'
 
 @ApiTags('gateway')
+@ApiBearerAuth()
 @Controller('gateway')
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}

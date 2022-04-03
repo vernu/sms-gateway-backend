@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { LoginInputDTO, RegisterInputDTO } from './auth.dto'
 import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
@@ -31,6 +31,7 @@ export class AuthController {
     required: false,
     description: 'Required if jwt bearer token not provided',
   })
+  @ApiBearerAuth()
   @Post('/api-keys')
   async generateApiKey(@Request() req) {
     const { apiKey, message } = await this.authService.generateApiKey(req.user)
@@ -44,6 +45,7 @@ export class AuthController {
     required: false,
     description: 'Required if jwt bearer token not provided',
   })
+  @ApiBearerAuth()
   @Get('/api-keys')
   async getApiKey(@Request() req) {
     const data = await this.authService.getUserApiKeys(req.user)
