@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Request, UseGuards } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
 import { LoginInputDTO, RegisterInputDTO } from './auth.dto'
+import { AuthGuard } from './auth.guard'
 import { AuthService } from './auth.service'
 import { JwtAuthGuard } from './jwt-auth.guard'
 
@@ -23,7 +24,8 @@ export class AuthController {
     return { data }
   }
 
-  @UseGuards(JwtAuthGuard)
+  
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Generate Api Key' })
   @Post('/api-keys')
   async generateApiKey(@Request() req) {
@@ -31,7 +33,7 @@ export class AuthController {
     return { data: apiKey, message }
   }
 
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Get Api Key List (masked***)' })
   @Get('/api-keys')
   async getApiKey(@Request() req) {
