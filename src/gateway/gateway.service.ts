@@ -8,15 +8,19 @@ import {
   SendSMSInputDTO,
   UpdateDeviceInputDTO,
 } from './gateway.dto'
+import { User } from 'src/users/schemas/user.schema'
 @Injectable()
 export class GatewayService {
   constructor(
     @InjectModel(Device.name) private deviceModel: Model<DeviceDocument>,
   ) {}
 
-  async registerDevice(input: RegisterDeviceInputDTO): Promise<any> {
+  async registerDevice(
+    input: RegisterDeviceInputDTO,
+    user: User,
+  ): Promise<any> {
     const { fcmToken } = input
-    const newDevice = await this.deviceModel.create({ fcmToken })
+    const newDevice = await this.deviceModel.create({ user, fcmToken })
     return newDevice
   }
 

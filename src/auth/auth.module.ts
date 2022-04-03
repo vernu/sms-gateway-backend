@@ -25,5 +25,6 @@ import { ApiKey, ApiKeySchema } from './schemas/api-key.schema'
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, MongooseModule],
+  exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

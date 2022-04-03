@@ -1,5 +1,6 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Param, Patch, Post, UseGuards, Request } from '@nestjs/common'
 import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { AuthGuard } from 'src/auth/auth.guard'
 import {
   RegisterDeviceInputDTO,
   SendSMSInputDTO,
@@ -12,10 +13,11 @@ import { GatewayService } from './gateway.service'
 export class GatewayController {
   constructor(private readonly gatewayService: GatewayService) {}
 
+  @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Register device' })
   @Post('/devices')
-  async registerDevice(@Body() input: RegisterDeviceInputDTO) {
-    const data = await this.gatewayService.registerDevice(input)
+  async registerDevice(@Body() input: RegisterDeviceInputDTO, @Request() req) {
+    const data = await this.gatewayService.registerDevice(input, req.user)
     return { data }
   }
 
