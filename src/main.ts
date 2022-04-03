@@ -22,7 +22,11 @@ async function bootstrap() {
     .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('', app, document)
+  SwaggerModule.setup('', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
 
   const firebaseConfig = {
     type: 'service_account',
