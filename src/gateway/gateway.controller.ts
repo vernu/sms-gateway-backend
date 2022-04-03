@@ -7,7 +7,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common'
-import { ApiOperation, ApiTags } from '@nestjs/swagger'
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/auth/auth.guard'
 import {
   RegisterDeviceInputDTO,
@@ -23,6 +23,11 @@ export class GatewayController {
 
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Register device' })
+  @ApiQuery({
+    name: 'apiKey',
+    required: false,
+    description: 'Required if jwt bearer token not provided',
+  })
   @Post('/devices')
   async registerDevice(@Body() input: RegisterDeviceInputDTO, @Request() req) {
     const data = await this.gatewayService.registerDevice(input, req.user)
