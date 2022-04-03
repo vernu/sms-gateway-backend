@@ -24,7 +24,6 @@ export class AuthController {
     return { data }
   }
 
-  
   @UseGuards(AuthGuard)
   @ApiOperation({ summary: 'Generate Api Key' })
   @Post('/api-keys')
