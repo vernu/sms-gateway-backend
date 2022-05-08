@@ -9,11 +9,7 @@ import {
 } from '@nestjs/common'
 import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger'
 import { AuthGuard } from 'src/auth/auth.guard'
-import {
-  RegisterDeviceInputDTO,
-  SendSMSInputDTO,
-  UpdateDeviceInputDTO,
-} from './gateway.dto'
+import { RegisterDeviceInputDTO, SendSMSInputDTO } from './gateway.dto'
 import { GatewayService } from './gateway.service'
 
 @ApiTags('gateway')
@@ -36,16 +32,26 @@ export class GatewayController {
   }
 
   @ApiOperation({ summary: 'Update device' })
+  @ApiQuery({
+    name: 'apiKey',
+    required: false,
+    description: 'Required if jwt bearer token not provided',
+  })
   @Patch('/devices/:id')
   async updateDevice(
     @Param('id') deviceId: string,
-    @Body() input: UpdateDeviceInputDTO,
+    @Body() input: RegisterDeviceInputDTO,
   ) {
     const data = await this.gatewayService.updateDevice(deviceId, input)
     return { data }
   }
 
   @ApiOperation({ summary: 'Send SMS to a device' })
+  @ApiQuery({
+    name: 'apiKey',
+    required: false,
+    description: 'Required if jwt bearer token not provided',
+  })
   @Post('/devices/:id/sendSMS')
   async sendSMS(
     @Param('id') deviceId: string,

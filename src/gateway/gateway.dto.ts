@@ -1,10 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 
 export class RegisterDeviceInputDTO {
-  fcmToken?: string
-}
-
-export class UpdateDeviceInputDTO {
   @ApiProperty({ type: Boolean })
   enabled?: boolean
 
@@ -38,6 +34,7 @@ export class UpdateDeviceInputDTO {
   @ApiProperty({ type: String })
   appVersionCode?: number
 }
+
 export class ISMSData {
   @ApiProperty({
     type: String,

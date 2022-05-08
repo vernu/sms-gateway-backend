@@ -3,11 +3,7 @@ import { InjectModel } from '@nestjs/mongoose'
 import { Device, DeviceDocument } from './schemas/device.schema'
 import { Model } from 'mongoose'
 import * as firebaseAdmin from 'firebase-admin'
-import {
-  RegisterDeviceInputDTO,
-  SendSMSInputDTO,
-  UpdateDeviceInputDTO,
-} from './gateway.dto'
+import { RegisterDeviceInputDTO, SendSMSInputDTO } from './gateway.dto'
 import { User } from 'src/users/schemas/user.schema'
 @Injectable()
 export class GatewayService {
@@ -19,14 +15,12 @@ export class GatewayService {
     input: RegisterDeviceInputDTO,
     user: User,
   ): Promise<any> {
-    const { fcmToken } = input
-    const newDevice = await this.deviceModel.create({ user, fcmToken })
-    return newDevice
+    return await this.deviceModel.create({ ...input, user })
   }
 
   async updateDevice(
     deviceId: string,
-    input: UpdateDeviceInputDTO,
+    input: RegisterDeviceInputDTO,
   ): Promise<any> {
     const device = await this.deviceModel.findById(deviceId)
 
