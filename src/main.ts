@@ -19,9 +19,14 @@ async function bootstrap() {
     .setTitle('VERNU SMS Gateway api docs')
     .setDescription('api docs')
     .setVersion('1.0')
+    .addBearerAuth()
     .build()
   const document = SwaggerModule.createDocument(app, config)
-  SwaggerModule.setup('', app, document)
+  SwaggerModule.setup('', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  })
 
   const firebaseConfig = {
     type: 'service_account',

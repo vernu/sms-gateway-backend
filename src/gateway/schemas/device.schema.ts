@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
+import { User } from 'src/users/schemas/user.schema'
 
 export type DeviceDocument = Device & Document
 
 @Schema({ timestamps: true })
 export class Device {
   _id?: Types.ObjectId
+
+  @Prop({ type: Types.ObjectId, ref: User.name })
+  user: User
 
   @Prop({ type: Boolean, default: false })
   enabled: boolean
